@@ -1,0 +1,19 @@
+services:
+  web:
+    build:
+      context: . # all files are taken from level of docker-compose.yml
+      dockerfile: Dockerfile.dev
+    ports: 
+      - "3000:3000"
+    volumes:
+      - /app/node_modules # do not map folder against app modules inside container , protects node_modules from being overwritten by your local bind mount
+      - .:/app # map folder outside container to insider container your current folder on host  →  /app inside container
+  
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
